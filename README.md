@@ -102,3 +102,13 @@ Windows 和 Ubuntu 各有一份源文件，通过同一 GitHub 仓库同步。
 两边 node_modules 分别安装，不复制，不提交。保留 package-lock.json。
 Windows 需单独安装 Git、Node.js，并配置自己的 SSH 身份。
 Ubuntu 私钥和工具位于 /opt/blog/site 之外，不上传仓库。
+
+## Butterfly 主题
+
+当前使用 Butterfly 5.7.0（npm 安装）。
+修改外观使用博客根目录的 `_config.butterfly.yml`；修改网站标题等使用 `_config.yml`。
+主题文件由 `npm ci` 根据 package-lock.json 安装，不直接修改 node_modules。
+修改主题配置后，停止并重新启动本地预览。
+导航页面：source/tags、source/categories、source/about。
+首页横幅：把自己的图片放进 source/images/，再将 index_img 设置为 /images/文件名。
+默认横幅为蓝色，头像为主题自带蝴蝶图标。

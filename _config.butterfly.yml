@@ -1,0 +1,52 @@
+# Butterfly 外观设置；其余选项使用安装版本的默认值。
+menu:
+  首页: / || fas fa-home
+  归档: /archives/ || fas fa-archive
+  标签: /tags/ || fas fa-tags
+  分类: /categories/ || fas fa-folder-open
+  关于: /about/ || fas fa-user
+
+social:
+  fab fa-github: https://github.com/yunrushui || GitHub
+
+favicon: /img/favicon.ico
+
+avatar:
+  img: /img/butterfly-icon.png
+  effect: false
+
+# 暂用主题默认蓝色横幅，可在此填写自己的图片路径。
+index_img:
+default_top_img:
+index_layout: 3
+
+aside:
+  enable: true
+  position: right
+  card_author:
+    enable: true
+    description:
+    button:
+      enable: true
+      icon: fab fa-github
+      text: GitHub
+      link: https://github.com/yunrushui
+  card_announcement:
+    enable: true
+    content: 欢迎来到 yunrushui 的博客。
+
+toc:
+  post: true
+  page: false
+  number: true
+  expand: false
+
+code_blocks:
+  theme: light
+  copy: true
+  language: true
+
+darkmode:
+  enable: true
+  button: true
+  autoChangeMode: false
