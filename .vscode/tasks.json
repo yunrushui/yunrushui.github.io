@@ -1,0 +1,25 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "预览博客",
+      "type": "shell",
+      "command": "npm run server -- --ip 127.0.0.1",
+      "linux": {
+        "command": "source /opt/blog/env.sh && npm run server -- --ip 127.0.0.1",
+        "options": { "shell": { "executable": "/bin/bash", "args": ["-c"] } }
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "检查博客生成",
+      "type": "shell",
+      "command": "npm run build",
+      "linux": {
+        "command": "source /opt/blog/env.sh && npm run build",
+        "options": { "shell": { "executable": "/bin/bash", "args": ["-c"] } }
+      },
+      "problemMatcher": []
+    }
+  ]
+}
