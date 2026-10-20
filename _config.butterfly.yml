@@ -12,11 +12,11 @@ social:
 favicon: /img/favicon.ico
 
 avatar:
-  img: /img/butterfly-icon.png
-  effect: false
+  img: /images/site/yunrushui.jpg
+  effect: true
 
 # 暂用主题默认蓝色横幅，可在此填写自己的图片路径。
-index_img:
+index_img: /images/site/shu.jpg
 default_top_img:
 index_layout: 3
 
@@ -33,7 +33,7 @@ aside:
       link: https://github.com/yunrushui
   card_announcement:
     enable: true
-    content: 欢迎来到 yunrushui 的博客。
+    content: 欢迎来到我的blog，将不定期分享学习笔记（包括但不限于具身/agent/算法）——25级电子科技大学信息与软件工程学院在读 。
 
 toc:
   post: true
