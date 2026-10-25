@@ -2,21 +2,9 @@
 title: 生成式ai的演进（人话版）
 top_img: /images/site/background.jpg
 cover: /images/site/xiahuo.jpg
-date: 2026-10-20 21:51:41
+date: 2026-10-25 19:53:41
 typora-root-url: ..
 ---
-
-k
-
-
-
-## 早期范式
-
-
-
-
-
-## 早期范式
 
 
 
@@ -170,5 +158,58 @@ IF？我们想要通过已有的一堆人脸图片，生成一个从未见过的
 
 ​	前向传播：利用预设好的噪声调度表，生成每个时间步加噪的图像，此处利用公式即可，较容易理解
 
-​	反向传播：
+​	反向传播：训练一个去噪网络，详见下图的框框部分，给定一个t时刻输入，去预测t-1时刻的输出，p-theta就是需要训练的神经网络；我们不妨换一个角度思考，其实神经网络无需预测生成的图片，只需要预测噪声即可，输入图片去除该预测的噪声即为输出所得。
 
+​	此网络的损失函数为mse均方误差。
+
+​	![image-20261025101052119](/images/posts/generative-ai-evolution/image-20261025101052119.png)
+
+​	此去噪网络骨干架构为**u-net**；另外一种架构选择为DiT（即transformer）
+
+​	U-net：DDPM 原论文采用的架构。对称的编码器-解码器结构，编码器逐层压缩提取抽象特征，解码器逐层放大还原分辨率，两侧通过跳跃连接（skip connections）直接传递信息，使输出同时保留深层抽象语义语义和浅层细节信息。输入输出尺寸相同，天然适合"输入噪声图、输出预测噪声"的去噪任务。
+
+![unet](/images/posts/generative-ai-evolution/unet.png)
+
+##### 扩散模型不可忽略的缺陷：
+
+​	生成速度过于慢，这是由于其操作均是在像素空间中进行（eg.单个512*512像素图片就有20多万像素，已经数量爆炸），这个是我们后续需要解决的问题。
+
+### Diffusion Models Beat GANs (2021) 
+
+具有一个里程碑的意义，扩散模型首次正式超过GAN模型。
+
+*Diffusion Models Beat GANs on Image Synthesis* — Dhariwal & Nichol (OpenAI) (2021)https://arxiv.org/abs/2105.05233
+
+##### 此文章最重要核心的创新点贡献
+
+​	**分类器引导（classifier guidance）**：扩散模型基于纯噪声出图，会生成出随机的东西，若想定向的生成该如何做？——解决的就是这个问题；我们额外训练一个分类器模型（类似可以是猫狗分类），然后我们把扩散模型每一步输出的中间结果去问询分类器（你认为ta是一个猫or狗的概率有多大？），并计算出一个梯度，此梯度会被注入的到扩散模型中，指引其下一步的修改更加接近目的。
+
+### GLIDE (2021)  
+
+> GLIDE - **G**uided **L**anguage to **I**mage **D**iffusion for Generation and **E**diting
+>
+> *GLIDE: Towards Photorealistic Image Generation and Editing with Text-Guided Diffusion Models* — Nichol et al. (OpenAI) (2021)https://arxiv.org/abs/2112.10741
+
+​		实现了无需分类器的自然语言生图。
+
+​		这个文章的方法十分巧妙且优雅，值得细细思考一下。
+
+​		在之前，Beat GANs的方法虽然可以引导生成，但是它过于依赖分类器的引导，并且天然地之只适配类别的标签而不能拓展到自由文本。因此GLIDE提出了一种**Classifier-Free Guidance（CFG）**的无需分类器的替代方案，引导能力在模型自身中体现，同时加上了cross-attention的文本注入（把文本信号注入到了神经网络的每一步）。
+
+​	具体**训练过程**的大致示意图如下图所示（不是特别全）：在每一个时间步输入为此时间步的噪声图+自然语言条件+时间步（图中没有提及）。
+
+​	![glide](/images/posts/generative-ai-evolution/glide.png)
+
+​	特别要注意的是，GLIDE训练过程中，会在约百分之10的轮次中把文本条件去掉，改为输入空白条件（小巧思），这时网络就只能通过噪声图来预测图片。于是此网络就能做到两件事情：1)当有文字输入时，网络会依照文本生图。2）无文本输入时，也可以硬着头皮输出图片。
+
+​	根据可以做的这两件事情，我们灵机一动想出一个做法，同时进行有文本的去噪生图和无文本的去噪生图，得到方向a和b，两个方向相减所得差值代表含义即为参考文本的生图倾向方向。后续再用此差值乘一个引导强度，再加上无文本时候的方向就是最终生图方向的公式：
+
+​	**无条件方向 + 引导强度 ×（有条件方向 − 无条件方向）**
+
+其中，引导强度越大，生成结果越贴合文本描述，但过大会牺牲生成图片的多样性与真实感。
+
+（有人可能会提出疑问，为什么GLIDE已经可以实现文本生成图片了，还要考虑这个什么空白条件加入，什么引导条件公式啥的？——>事实上这是因为直接text to image的方式并非最优，prompt对于最终生图效果的影响不一定占主导，CFG核心思想就是把prompt带来的影响单独提取出来再进行放大，使得模型能够少自由发挥，多按prompt执行，从而生成结果更准确可控。）
+
+### LDM  (2021) / Stable Diffusion 
+
+> *High-Resolution Image Synthesis with Latent Diffusion Models* — Rombach et al. (2021)https://arxiv.org/abs/2112.10752

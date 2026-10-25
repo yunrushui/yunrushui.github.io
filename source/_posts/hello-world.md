@@ -1,5 +1,5 @@
 ---
-title: 官方自带的说明教程，梦开始的地方
+title: 自带说明教程
 top_img: /images/site/background.jpg
 cover: /images/site/xiahuo.jpg
 ---

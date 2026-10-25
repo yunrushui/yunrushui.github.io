@@ -51,8 +51,8 @@ darkmode:
   button: true
   autoChangeMode: false
 
-archive_img: /images/site/background.jpg
+archive_img: /images/site/shu.jpg
 
-tag_img: /images/site/background.jpg
+tag_img: /images/site/shu.jpg
 
-category_img: /images/site/background.jpg
+category_img: /images/site/shu.jpg
