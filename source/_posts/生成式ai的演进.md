@@ -1,7 +1,7 @@
 ---
-title: 生成式ai的演进（人话版）
+title: 生成式ai的演进及diffusion初步
 top_img: /images/site/background.jpg
-cover: /images/site/xiahuo.jpg
+cover: /images/site/stable_diffusion.png
 date: 2026-10-25 19:53:41
 typora-root-url: ..
 ---
